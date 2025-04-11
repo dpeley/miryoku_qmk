@@ -89,3 +89,122 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(thumbcombos_fun, KC_APP)
 };
 #endif
+
+
+/*
+#######################
+# Start custom config #
+#######################
+*/
+
+// Flat response mouse adjustment
+
+#if defined (KEYBOARD_crkbd)
+void ps2_mouse_moved_user(report_mouse_t *mouse_report) {
+  // Moving left.
+  if (mouse_report->x < 0) {
+    mouse_report->x *= 2; // Adjust the last number as needed to fine tune
+  }
+  // Moving right.
+  if (mouse_report->x > 0) {
+    mouse_report->x *= 2; // Adjust the last number as needed to fine tune
+  }
+  // Moving up.
+  if (mouse_report->y < 0) {
+    mouse_report->y *= 1.5; // Adjust the last number as needed to fine tune
+  }
+  // Moving down.
+  if (mouse_report->y > 0) {
+    mouse_report->y *= 2; // Adjust the last number as needed to fine tune
+    
+  }
+};
+#endif
+
+/*
+// Logrithmic mouse speed adjustment
+
+// Modify these to adjust non-linear mouse scaling
+#define MAX_SCALE 32
+#define MIN_SCALE 1
+#define GROWTH_FACTOR 64
+#define MOMENTUM 0.01
+
+// Variable to store an exponential moving average scaling factor to denoise the non-linear scaling
+float accumulated_factor = MIN_SCALE;
+
+// add non-linear scaling to all mouse movements
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // compute the size of the last mouse movement
+    float mouse_length = sqrt(mouse_report.x*mouse_report.x + mouse_report.y*mouse_report.y);
+
+    // compute an instantaneous scaling factor and update exponential moving average
+    float factor =  GROWTH_FACTOR*mouse_length+ MIN_SCALE;
+    accumulated_factor = accumulated_factor*(1-MOMENTUM) + factor*MOMENTUM;
+
+    if (accumulated_factor > MAX_SCALE) {
+        // clamp the scaling factor to avoid overflowing mouse_report
+        mouse_report.x *= MAX_SCALE;
+        mouse_report.y *= MAX_SCALE;
+    }
+    else {
+        // scale up the mouse movement by the average factor
+        mouse_report.x = (int16_t)(mouse_report.x * accumulated_factor);
+        mouse_report.y = (int16_t)(mouse_report.y * accumulated_factor);
+    }
+
+    return mouse_report;
+};
+*/
+
+// OLED customization
+
+/*
+#ifdef OLED_ENABLE
+bool oled_task_user(void) {
+    // Host Keyboard Layer Status
+    oled_write_P(PSTR("Layer: "), false);
+
+    switch (get_highest_layer(layer_state)) {
+        case BASE:
+            oled_write_P(PSTR("Colemak\n"), false);
+            break;
+        case TAP:
+            oled_write_P(PSTR("Tap\n"), false);
+            break;
+        case NAV:
+            oled_write_P(PSTR("Navigation\n"), false);
+            break;
+        case MOUSE:
+            oled_write_P(PSTR("Mouse\n"), false);
+            break;
+        case MEDIA:
+            oled_write_P(PSTR("Media\n"), false);
+            break;
+        case NUM:
+            oled_write_P(PSTR("Numbers\n"), false);
+            break;
+        case SYM:
+            oled_write_P(PSTR("Symbols\n"), false);
+            break;
+        case FUN:
+            oled_write_P(PSTR("Functions\n"), false);
+            break;
+        case BUTTON:
+            oled_write_P(PSTR("Button\n"), false);
+            break;
+        default:
+            // Or use the write_ln shortcut over adding '\n' to the end of your string
+            oled_write_ln_P(PSTR("Undefined"), false);
+    }
+
+    // Host Keyboard LED Status
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+    oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+    oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    
+    return false;
+}
+#endif
+*/
